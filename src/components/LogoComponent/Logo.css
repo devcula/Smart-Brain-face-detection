@@ -1,0 +1,7 @@
+.Tilt-inner{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to right, #de6262, #ffb88c);
+    border-radius: 10px 0px 10px 0px;
+}
