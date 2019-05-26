@@ -24,8 +24,11 @@ const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange }) => {
     else if(state.route === 'register'){
         return <Register onRouteChange={onRouteChange} />;
     }
+    else if(state.route==="signout"){
+        return <Login onRouteChange={onRouteChange} />;
+    }
     else{
-
+        
     }
 }
 

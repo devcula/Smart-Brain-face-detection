@@ -2,13 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Navigation from './components/NavComponent/Navigation'
 import Logo from './components/LogoComponent/Logo';
-import ImageLinkForm from './components/ImageLinkComponent/ImageLinkForm';
-import Rank from './components/RankComponent/Rank';
 import Particles from 'react-particles-js';
 import Clarifai from 'clarifai';
-import FaceDetection from './components/FaceDetectionComponent/FaceDetection';
-import Login from './components/LoginComponent/Login';
-import Register from './components/RegisterComponent/Register';
 import Router from './components/RoutingComponent/Router';
 
 const app = new Clarifai.App({
@@ -34,11 +29,31 @@ class App extends Component {
       input: "",
       imageUrl: "",
       boxes: [],
-      route: "signin"
+      route: "signin",
+      isSignedIn: false
     }
   }
 
-  onRouteChange = (route)=>{
+  resetState = () => {
+    this.setState({
+      input: "",
+      imageUrl: "",
+      boxes: [],
+      route: "signin",
+      isSignedIn: false
+    })
+  }
+
+  onRouteChange = (route) => {
+    if (route === "home") {
+      this.setState({ isSignedIn: true });
+    }
+    else if (route === "signout") {
+      this.resetState();
+    }
+    else {
+      this.setState({ isSignedIn: false });
+    }
     this.setState({ route: route });
   }
 
@@ -54,7 +69,6 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    // const faceData = data.outputs[0].data.regions[0].region_info.bounding_box;
     const faceData = data.outputs[0].data.regions;
     if (faceData) {
       const image = document.getElementById("inputimage");
@@ -71,7 +85,7 @@ class App extends Component {
       console.log(faceLocationsData);
       return faceLocationsData;
     }
-    else{
+    else {
       return [];
     }
   }
@@ -84,25 +98,13 @@ class App extends Component {
     return (
       <div>
         <Particles params={particlesOptions} className="particles" />
-        <Navigation onRouteChange={ this.onRouteChange }/>
+        <Navigation onRouteChange={this.onRouteChange} isSignedIn={this.state.isSignedIn} />
         <Logo />
-        {/* <Register onRouteChange={this.onRouteChange} />
-        { this.state.route === "signin" ?
-          <Login onRouteChange = { this.onRouteChange }/> :
-          <div>
-            <Rank />
-            <ImageLinkForm
-              onInputChange={this.onInputChange}
-              onButtonSubmit={this.onButtonSubmit}
-            />
-            <FaceDetection boxList={this.state.boxes} imageUrl={this.state.imageUrl} />
-          </div>
-        } */}
-        <Router 
-        state={this.state} 
-        onRouteChange={this.onRouteChange} 
-        onButtonSubmit={this.onButtonSubmit} 
-        onInputChange={this.onInputChange}
+        <Router
+          state={this.state}
+          onRouteChange={this.onRouteChange}
+          onButtonSubmit={this.onButtonSubmit}
+          onInputChange={this.onInputChange}
         />
       </div>
     )

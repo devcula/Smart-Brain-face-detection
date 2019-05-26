@@ -5,7 +5,7 @@ const Register = ({ onRouteChange }) => {
     return (
         <div className="align-center register center w-50 br3">
             <main className="pa4 black-80">
-                <form className="measure center">
+                <div className="measure center">
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                         <legend className="f2 fw6 ph0 mh0 tc">Welcome to Smart Brain</legend>
                         <div className="mt3">
@@ -30,7 +30,7 @@ const Register = ({ onRouteChange }) => {
                     <div className="lh-copy mt3">
                         <p onClick={() => onRouteChange('signin')} className="pointer f5 link dim black db">Already a member? Login </p>
                     </div>
-                </form>
+                </div>
             </main>
         </div>
     )

@@ -5,7 +5,7 @@ const Login = ({ onRouteChange }) => {
     return (
         <div className="align-center login center w-50 br3">
             <main className="pa4 black-80">
-                <form className="measure center">
+                <div className="measure center">
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                         <legend className="f2 fw6 ph0 mh0 tc">Sign In</legend>
                         <div className="mt3">
@@ -28,7 +28,7 @@ const Login = ({ onRouteChange }) => {
                         <p onClick={() => onRouteChange('register')} className="f5 link dim black db pointer">Register</p>
                         <a href="/" className="f5 link dim black db">Forgot your password?</a>
                     </div>
-                </form>
+                </div>
             </main>
         </div>
     )
