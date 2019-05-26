@@ -9,6 +9,7 @@ import Clarifai from 'clarifai';
 import FaceDetection from './components/FaceDetectionComponent/FaceDetection';
 import Login from './components/LoginComponent/Login';
 import Register from './components/RegisterComponent/Register';
+import Router from './components/RoutingComponent/Router';
 
 const app = new Clarifai.App({
   apiKey: '4d486af086af4bab919bd537a915c5c6'
@@ -41,6 +42,17 @@ class App extends Component {
     this.setState({ route: route });
   }
 
+  onInputChange = (event) => {
+    this.setState({ input: event.target.value });
+  }
+
+  onButtonSubmit = () => {
+    this.setState({ imageUrl: this.state.input });
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+      .then(response => this.setFaceData(this.calculateFaceLocation(response)))
+      .catch(err => console.log(err));
+  }
+
   calculateFaceLocation = (data) => {
     // const faceData = data.outputs[0].data.regions[0].region_info.bounding_box;
     const faceData = data.outputs[0].data.regions;
@@ -68,24 +80,13 @@ class App extends Component {
     this.setState({ boxes: box });
   }
 
-  onInputChange = (event) => {
-    this.setState({ input: event.target.value });
-  }
-
-  onButtonSubmit = () => {
-    this.setState({ imageUrl: this.state.input });
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-      .then(response => this.setFaceData(this.calculateFaceLocation(response)))
-      .catch(err => console.log(err));
-  }
-
   render() {
     return (
       <div>
         <Particles params={particlesOptions} className="particles" />
         <Navigation onRouteChange={ this.onRouteChange }/>
         <Logo />
-        <Register onRouteChange={this.onRouteChange} />
+        {/* <Register onRouteChange={this.onRouteChange} />
         { this.state.route === "signin" ?
           <Login onRouteChange = { this.onRouteChange }/> :
           <div>
@@ -96,7 +97,13 @@ class App extends Component {
             />
             <FaceDetection boxList={this.state.boxes} imageUrl={this.state.imageUrl} />
           </div>
-        }
+        } */}
+        <Router 
+        state={this.state} 
+        onRouteChange={this.onRouteChange} 
+        onButtonSubmit={this.onButtonSubmit} 
+        onInputChange={this.onInputChange}
+        />
       </div>
     )
   }
