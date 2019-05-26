@@ -1,5 +1,5 @@
 import React from 'react';
-import './FaceDetection.css';
+import Box from '../BoxComponent/Box';
 
 const FaceDetection = ({ imageUrl, boxList })=>{
     return (
@@ -9,10 +9,7 @@ const FaceDetection = ({ imageUrl, boxList })=>{
                 {
                     boxList.map(box =>{
                         return (
-                            <div 
-                            className="bounding-box" 
-                            style={{top: box.topRow, right: box.rightCol, bottom: box.bottomRow, left: box.leftCol}}>
-                            </div>
+                            <Box box={box} />
                         )
                     })
                 }
