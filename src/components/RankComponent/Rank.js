@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Rank = ()=> {
+const Rank = ({state})=> {
     return (
         <div style={{textAlign: "center"}}>
             <div className="white f2">
-                {'dEvCuLa your current rank is...'}
+                {`Hello ${state.currentUser.name}, number of faces that you have detected so far is...`}
             </div>
             <div className="f1 white">
-                {'#5'}
+                {state.currentUser.entries}
             </div>
         </div>
     )

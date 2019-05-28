@@ -5,14 +5,14 @@ import FaceDetection from '../FaceDetectionComponent/FaceDetection';
 import Login from '../LoginComponent/Login';
 import Register from '../RegisterComponent/Register';
 
-const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange }) => {
+const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange, updateUser }) => {
     if (state.route === 'signin') {
-        return <Login onRouteChange={onRouteChange} />;
+        return <Login onRouteChange={onRouteChange} updateUser={updateUser}/>;
     }
     else if (state.route === 'home') {
         return (
             <div>
-                <Rank />
+                <Rank state = {state}/>
                 <ImageLinkForm
                     onInputChange={onInputChange}
                     onButtonSubmit={onButtonSubmit}
@@ -22,10 +22,10 @@ const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange }) => {
         )
     }
     else if(state.route === 'register'){
-        return <Register onRouteChange={onRouteChange} />;
+        return <Register onRouteChange={onRouteChange} updateUser={updateUser}/>;
     }
     else if(state.route==="signout"){
-        return <Login onRouteChange={onRouteChange} />;
+        return <Login onRouteChange={onRouteChange} updateUser={updateUser}/>;
     }
     else{
         

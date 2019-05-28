@@ -30,7 +30,14 @@ class App extends Component {
       imageUrl: "",
       boxes: [],
       route: "signin",
-      isSignedIn: false
+      isSignedIn: false,
+      currentUser: {
+        id: "",
+        email: "",
+        name: "",
+        entries: "",
+        joined: ""
+      }
     }
   }
 
@@ -40,8 +47,30 @@ class App extends Component {
       imageUrl: "",
       boxes: [],
       route: "signin",
-      isSignedIn: false
+      isSignedIn: false,
+      currentUser: {
+        id: "",
+        email: "",
+        name: "",
+        entries: "",
+        joined: ""
+      }
     })
+  }
+
+  updateUser = (user) =>{
+    this.setState(
+      {
+        currentUser: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          entries: user.entries,
+          joined: user.joined
+        },
+        isSignedIn: true
+      }
+    )
   }
 
   onRouteChange = (route) => {
@@ -82,7 +111,17 @@ class App extends Component {
           bottomRow: height - (faceData.bottom_row * height)
         }
       });
-      console.log(faceLocationsData);
+      fetch("http://localhost:3000/update",{
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          id: this.state.currentUser.id,
+          entries: faceData.length
+        })
+      }).then(response => response.json())
+      .then(user => {
+        this.updateUser(user);
+      })
       return faceLocationsData;
     }
     else {
@@ -104,7 +143,8 @@ class App extends Component {
           state={this.state}
           onRouteChange={this.onRouteChange}
           onButtonSubmit={this.onButtonSubmit}
-          onInputChange={this.onInputChange}
+          onInputChange={this.onInputChange} 
+          updateUser={this.updateUser}
         />
       </div>
     )
