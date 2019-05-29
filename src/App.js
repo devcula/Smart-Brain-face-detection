@@ -91,10 +91,15 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
-    this.setState({ imageUrl: this.state.input });
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-      .then(response => this.setFaceData(this.calculateFaceLocation(response)))
-      .catch(err => console.log(err));
+    if(this.state.input){
+      this.setState({ imageUrl: this.state.input });
+      app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+        .then(response => this.setFaceData(this.calculateFaceLocation(response)))
+        .catch(err => console.log(err));
+    }
+    else{
+      alert("Please enter a url");
+    }
   }
 
   calculateFaceLocation = (data) => {

@@ -2,147 +2,153 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const bodyParser = require('body-parser');
-const bcryptjs =  require('bcryptjs');
+const bcryptjs = require('bcryptjs');
 const cors = require('cors');
+const knex = require('knex');
+
 app.use(bodyParser.json());
 app.use(cors());
 
-const hashFunction = (password) =>{
-    const salt = bcryptjs.genSaltSync(10);
-    return bcryptjs.hashSync(password,salt);
+const db = knex({
+    client: 'pg',
+    connection: {
+        host: '127.0.0.1',
+        user: 'devcula',
+        password: 'password',
+        database: 'smart-brain'
+    }
+})
+
+const runtimeErrorLogger = (runtimeError) =>{
+    fs.appendFile("./runtimeError.log", `\n${new Date()}, ${runtimeError.toString()}`, err => {
+        throw err;
+    })
 }
 
-app.get("/", (req, res) =>{
-    fs.readFile("./users.json", (err, data) =>{
-        if(err){
-            console.log(err);
-            res.status(500).send("Technical error");
-        }
-        else{
-            const users =JSON.parse(data.toString());
-            res.status(200).send(`Number of users registered with us = ${users.length}`);
-        }
-    })
+const hashFunction = (password) => {
+    const salt = bcryptjs.genSaltSync(10);
+    return bcryptjs.hashSync(password, salt);
+}
+
+app.get("/", (req, res) => {
+    try{
+        db("users").select("*")
+        .then(dbUsers => {
+            res.status(200).send(`Number of users registered with us = ${dbUsers.length}`);
+        })
+        .catch(err => {
+            console.log("error while fetching users from database");
+            throw err;
+        })
+    }
+    catch(err){
+        console.log("Error caught while processing request.");
+        res.status(500).send("Technical Error");
+    }
 })
 
-app.post("/register", (req, res)=>{
-    const {name, email, password} = req.body;
-    fs.readFile("./users.json", ( err, data ) =>{
-        if(err){
+app.post("/register", (req, res) => {
+    const { name, email, password } = req.body;
+    if(name && email && password){
+        db.transaction(trx => {
+            trx.insert({
+                email: email,
+                hash: hashFunction(password)
+            }).into("login")
+            .returning("email")
+            .then(userEmail => {
+                return trx.insert({
+                    email: userEmail[0],
+                    name: name,
+                    joined: new Date()
+                }).into("users")
+                .returning("*")
+                .then(users =>{
+                    res.status(200).json(users[0]);
+                })
+            })
+            .then(response =>{
+                console.log("Going to commit");
+                trx.commit();
+            })
+            .catch(err => {
+                console.log("Error..Rolling back changes..Check log");
+                runtimeErrorLogger(err);
+                trx.rollback();
+            })
+        })
+        .catch(err => {
             console.log(err);
-            res.status(500).send("Technical error");
-        }
-        else{
-            let users = JSON.parse(data.toString());
-            let newUser;
-            if(users.length===0){
-                newUser = {
-                    id: 1,
-                    name: name,
-                    email: email,
-                    entries: 0,
-                    joined: new Date()
-                }
-            }
-            else{
-                newUser = {
-                    id: users[users.length-1].id +1,
-                    name: name,
-                    email: email,
-                    entries: 0,
-                    joined: new Date()
-                }
-            }
-            users.push(newUser);
-            fs.writeFile("./users.json",JSON.stringify(users), err=>{
-                if(err){
-                    console.log(err);
-                    res.status(500).send("Technical error");
-                }
-            });
-            fs.readFile("./login.json", (err, data) =>{
-                if(err){
-                    console.log(err);
-                    res.status(500).send("Technical error");
-                }
-                else{
-                    let preData = JSON.parse(data.toString());
-                    const newData = {
-                        id: newUser.id,
-                        hash: hashFunction(password)
-                    }
-                    preData.push(newData);
-                    fs.writeFile("./login.json", JSON.stringify(preData), err=>{
-                        if(err){
-                            console.log(err);
-                            res.status(500).send("Technical error");
-                        }
-                    });
-                }
-            });
-            res.status(200).send(newUser);
-        }
-    });
+            runtimeErrorLogger(err);
+            res.status(500).send("Unable to register");
+        })
+    }
+    else{
+        console.log("Bad data received. Unable to register");
+        res.status(400).send("Incomplete data provided");
+    }
 })
 
-app.post("/login", ( req, res ) =>{
-    const {email, password} = req.body;
-    let user;
-    fs.readFile("./users.json", (err, data) =>{
-        if(err){
-            console.log(err);
-            res.status(500).send("Technical Error");
-        }
-        else{
-            const dbUser = JSON.parse(data.toString()).filter(obj => {
-                return obj.email === email;
-            });
-            if(dbUser.length > 0){
-                user = dbUser[0];
-                fs.readFile("./login.json", ( err, data )=>{
-                    const loginObj = JSON.parse(data.toString()).filter(obj =>{
-                        return obj.id === user.id;
-                    })
-                    if(loginObj.length===0){
-                        res.status(400).send("User not found. Kindly register!");
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    let dbUser;
+    db.select("*").from("login").where({email: email})
+    .then(cred => {
+        if(cred.length > 0){
+            if(bcryptjs.compareSync(password, cred[0].hash)){
+                db.select("*").from("users").where({email: email})
+                .then(user => {
+                    if(user.length > 0){
+                        console.log("Login successful");
+                        res.status(200).json(user[0]);
                     }
                     else{
-                        if(bcryptjs.compareSync(password,loginObj[0].hash)){
-                            res.status(200).send(user);
-                        }
-                        else{
-                            res.status(400).send("Email/password incorrect. Please try again!");
-                        }
+                        console.log("User not found");
+                        res.status(400).send("User doesn't exist");
                     }
-                });
+                })
+                .catch(err => {
+                    console.log("Error while fetching user");
+                    runtimeErrorLogger(err);
+                    res.status(500).send("Technical error");
+                })
             }
             else{
-                res.status(400).send("User not found. Kindly register!");
+                console.log("Invalid Username/password");
+                res.status(400).send("Invalid email/password");
             }
         }
-    });
-})
-
-app.put("/update" , (req, res) =>{
-    const {id, entries} = req.body;
-    fs.readFile("./users.json", (err, data) =>{
-        let users = JSON.parse(data.toString());
-        let updatedUser;
-        users.forEach(user => {
-            if(user.id === id){
-                user.entries+=entries;
-                updatedUser = user; 
-            }
-        })
-        fs.writeFile("./users.json",JSON.stringify(users), err =>{
-            if(err){
-                console.log(err);
-            }
-        })
-        res.status(200).send(updatedUser);
+        else{
+            console.log("User credentials not found");
+            res.status(400).send("User doesn't exist");
+        }
+    })
+    .catch(err => {
+        console.log("Error while fetching credentials");
+        runtimeErrorLogger(err);
+        res.status(500).send("Technical Error");
     })
 })
 
-app.listen(3000, () =>{
+app.put("/update", (req, res) => {
+    const { id, entries } = req.body;
+    db("users").increment({entries: entries}).where({id: id}).returning("*")
+    .then(user => {
+        if(user.length > 0){
+            console.log("Entries updated successfully");
+            res.status(200).json(user[0]);
+        }
+        else{
+            console.log("User with received id not found");
+            res.status(400).send("Bad id received");
+        }
+    })
+    .catch(err => {
+        console.log("Error while receiving user from database");
+        runtimeErrorLogger(err);
+    })
+})
+
+app.listen(3000, () => {
     console.log("Server up and listening on port 3000");
 })

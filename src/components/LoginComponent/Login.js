@@ -19,15 +19,20 @@ class Login extends React.Component {
     }
 
     login = () =>{
-        fetch("http://localhost:3000/login",{
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(this.state)
-        }).then(response => response.json())
-        .then(user => {
-            this.props.updateUser(user);
-            this.props.onRouteChange('home');
-        }); 
+        if(this.state.email && this.state.password){
+            fetch("http://localhost:3000/login",{
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(this.state)
+            }).then(response => response.json())
+            .then(user => {
+                this.props.updateUser(user);
+                this.props.onRouteChange('home');
+            });
+        }
+        else{
+            alert("Please enter both email and password");
+        } 
     }
 
     render(){
@@ -42,8 +47,8 @@ class Login extends React.Component {
                                 <input 
                                 className="br-pill outline-0 shadow-5 pa3 input-reset bn bg-transparent hover-bg-black hover-white w-100" 
                                 type="email" 
-                                name="email-address" 
-                                id="email-address"
+                                name="email" 
+                                id="email"
                                 required
                                 onChange = {this.onEmailChange}
                                 />
@@ -62,7 +67,7 @@ class Login extends React.Component {
                         </fieldset>
                         <div className="tc">
                             <input
-                            onClick={this.login} 
+                            onClick={this.login}
                             className="w-100 br-pill outline-0 pa4 b ph3 pv2 input-reset ba shadow-5 grow pointer f4 dib" 
                             type="submit" 
                             value="Sign in" />
