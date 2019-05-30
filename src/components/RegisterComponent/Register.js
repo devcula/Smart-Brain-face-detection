@@ -29,11 +29,19 @@ class Register extends React.Component {
                 method: "POST",
                 body: JSON.stringify(this.state),
                 headers: {"Content-Type": "application/json"}
-            }).then(response => response.json())
+            }).then(response =>  response.json())
             .then(res => {
-                this.props.updateUser(res);
-                this.props.onRouteChange('home');
-            });
+                if(res.id){
+                    this.props.updateUser(res);
+                    this.props.onRouteChange('home');
+                }
+                else{
+                    alert(res.message);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
         }
         else{
             alert("Please enter all the information");

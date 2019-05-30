@@ -25,20 +25,15 @@ class Login extends React.Component {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(this.state)
             }).then(response => {
-                if(response.status === 200){
-                    return response.json();
-                }
-                else{
-                    return undefined;
-                }
+                return response.json();
             })
             .then(user => {
-                if(user){
+                if(user.id){
                     this.props.updateUser(user);
                     this.props.onRouteChange('home');
                 }
                 else{
-                    alert("Invalid Username/password");
+                    alert(user.message);
                 }
             });
         }
