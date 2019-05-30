@@ -9,10 +9,12 @@
     "react-particles-js": "^2.6.0",
     "react-scripts": "3.0.1",
     "react-tilt": "^0.1.4",
+    "serve": "^11.0.1",
     "tachyons": "^4.11.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    // "start": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
