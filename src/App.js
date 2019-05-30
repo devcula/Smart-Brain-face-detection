@@ -3,12 +3,8 @@ import './App.css';
 import Navigation from './components/NavComponent/Navigation'
 import Logo from './components/LogoComponent/Logo';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 import Router from './components/RoutingComponent/Router';
 
-const app = new Clarifai.App({
-  apiKey: '4d486af086af4bab919bd537a915c5c6'
-});
 
 const particlesOptions = {
   particles: {
@@ -93,9 +89,19 @@ class App extends Component {
   onButtonSubmit = () => {
     if(this.state.input){
       this.setState({ imageUrl: this.state.input });
-      app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-        .then(response => this.setFaceData(this.calculateFaceLocation(response)))
-        .catch(err => console.log(err));
+      fetch("http://localhost:3000/clarifai",{
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          id: this.state.currentUser.id,
+          imageurl: this.state.input
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        this.setFaceData(this.calculateFaceLocation(data));
+      })
+      .catch(err => console.log(err));
     }
     else{
       alert("Please enter a url");
@@ -116,7 +122,7 @@ class App extends Component {
           bottomRow: height - (faceData.bottom_row * height)
         }
       });
-      fetch("https://dry-ravine-79367.herokuapp.com/update",{
+      fetch("http://localhost:3000/update",{
         method: "PUT",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({

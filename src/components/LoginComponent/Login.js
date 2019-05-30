@@ -20,25 +20,20 @@ class Login extends React.Component {
 
     login = () =>{
         if(this.state.email && this.state.password){
-            fetch("https://dry-ravine-79367.herokuapp.com/login",{
+            fetch("http://localhost:3000/login",{
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(this.state)
             }).then(response => {
-                if(response.status === 200){
-                    return response.json();
-                }
-                else{
-                    return undefined;
-                }
+                return response.json();
             })
             .then(user => {
-                if(user){
+                if(user.id){
                     this.props.updateUser(user);
                     this.props.onRouteChange('home');
                 }
                 else{
-                    alert("Invalid Username/password");
+                    alert(user.message);
                 }
             });
         }

@@ -25,15 +25,23 @@ class Register extends React.Component {
 
     register = () =>{
         if(this.state.email && this.state.name && this.state.password){
-            fetch("https://dry-ravine-79367.herokuapp.com/register", {
+            fetch("http://localhost:3000/register", {
                 method: "POST",
                 body: JSON.stringify(this.state),
                 headers: {"Content-Type": "application/json"}
-            }).then(response => response.json())
+            }).then(response =>  response.json())
             .then(res => {
-                this.props.updateUser(res);
-                this.props.onRouteChange('home');
-            });
+                if(res.id){
+                    this.props.updateUser(res);
+                    this.props.onRouteChange('home');
+                }
+                else{
+                    alert(res.message);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
         }
         else{
             alert("Please enter all the information");

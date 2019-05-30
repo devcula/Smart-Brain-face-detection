@@ -7,9 +7,9 @@ const FaceDetection = ({ imageUrl, boxList })=>{
             <div className="absolute mt2">
                 <img id="inputimage" src={ imageUrl } alt=""  width="500px" height="auto"/>
                 {
-                    boxList.map(box =>{
+                    boxList.map((box,i) =>{
                         return (
-                            <Box box={box} />
+                            <Box key={i} box={box} />
                         )
                     })
                 }
