@@ -25,7 +25,7 @@ class Register extends React.Component {
 
     register = () =>{
         if(this.state.email && this.state.name && this.state.password){
-            fetch("https://dry-ravine-79367.herokuapp.com/register", {
+            fetch("http://localhost:3000/register", {
                 method: "POST",
                 body: JSON.stringify(this.state),
                 headers: {"Content-Type": "application/json"}

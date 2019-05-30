@@ -116,7 +116,7 @@ class App extends Component {
           bottomRow: height - (faceData.bottom_row * height)
         }
       });
-      fetch("https://dry-ravine-79367.herokuapp.com/update",{
+      fetch("http://localhost:3000/update",{
         method: "PUT",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
