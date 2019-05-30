@@ -6,6 +6,8 @@ import Particles from 'react-particles-js';
 import Router from './components/RoutingComponent/Router';
 
 
+const URI = "https://dry-ravine-79367.herokuapp.com";
+
 const particlesOptions = {
   particles: {
     number: {
@@ -89,7 +91,7 @@ class App extends Component {
   onButtonSubmit = () => {
     if(this.state.input){
       this.setState({ imageUrl: this.state.input });
-      fetch("http://localhost:3000/clarifai",{
+      fetch(URI + "/clarifai",{
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -122,7 +124,7 @@ class App extends Component {
           bottomRow: height - (faceData.bottom_row * height)
         }
       });
-      fetch("http://localhost:3000/update",{
+      fetch(URI + "/update",{
         method: "PUT",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -156,7 +158,8 @@ class App extends Component {
           onRouteChange={this.onRouteChange}
           onButtonSubmit={this.onButtonSubmit}
           onInputChange={this.onInputChange} 
-          updateUser={this.updateUser}
+          updateUser={this.updateUser} 
+          URI = {URI}
         />
       </div>
     )

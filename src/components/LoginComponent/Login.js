@@ -20,7 +20,7 @@ class Login extends React.Component {
 
     login = () =>{
         if(this.state.email && this.state.password){
-            fetch("http://localhost:3000/login",{
+            fetch(this.props.URI + "/login",{
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(this.state)

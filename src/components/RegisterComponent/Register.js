@@ -25,7 +25,7 @@ class Register extends React.Component {
 
     register = () =>{
         if(this.state.email && this.state.name && this.state.password){
-            fetch("http://localhost:3000/register", {
+            fetch(this.props.URI + "/register", {
                 method: "POST",
                 body: JSON.stringify(this.state),
                 headers: {"Content-Type": "application/json"}

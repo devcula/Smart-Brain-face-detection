@@ -5,9 +5,9 @@ import FaceDetection from '../FaceDetectionComponent/FaceDetection';
 import Login from '../LoginComponent/Login';
 import Register from '../RegisterComponent/Register';
 
-const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange, updateUser }) => {
+const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange, updateUser, URI }) => {
     if (state.route === 'signin') {
-        return <Login onRouteChange={onRouteChange} updateUser={updateUser}/>;
+        return <Login onRouteChange={onRouteChange} updateUser={updateUser} URI={URI}/>;
     }
     else if (state.route === 'home') {
         return (
@@ -22,10 +22,10 @@ const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange, updateUse
         )
     }
     else if(state.route === 'register'){
-        return <Register onRouteChange={onRouteChange} updateUser={updateUser}/>;
+        return <Register onRouteChange={onRouteChange} updateUser={updateUser} URI={URI}/>;
     }
     else if(state.route==="signout"){
-        return <Login onRouteChange={onRouteChange} updateUser={updateUser}/>;
+        return <Login onRouteChange={onRouteChange} updateUser={updateUser} URI={URI}/>;
     }
     else{
         
