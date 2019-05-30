@@ -24,10 +24,23 @@ class Login extends React.Component {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(this.state)
-            }).then(response => response.json())
+            }).then(response => {
+                console.log(response);
+                if(response.status === 200){
+                    return response.json();
+                }
+                else{
+                    return undefined;
+                }
+            })
             .then(user => {
-                this.props.updateUser(user);
-                this.props.onRouteChange('home');
+                if(user){
+                    this.props.updateUser(user);
+                    this.props.onRouteChange('home');
+                }
+                else{
+                    alert("Invalid Username/password");
+                }
             });
         }
         else{

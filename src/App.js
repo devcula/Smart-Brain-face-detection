@@ -127,6 +127,7 @@ class App extends Component {
       .then(user => {
         this.updateUser(user);
       })
+      .catch(err => console.log(err));
       return faceLocationsData;
     }
     else {

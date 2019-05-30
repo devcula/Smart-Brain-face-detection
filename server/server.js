@@ -115,12 +115,12 @@ app.post("/login", (req, res) => {
             }
             else{
                 console.log("Invalid Username/password");
-                res.status(400).send("Invalid email/password");
+                res.status(400).json("Invalid email/password");
             }
         }
         else{
             console.log("User credentials not found");
-            res.status(400).send("User doesn't exist");
+            res.status(400).json("User doesn't exist");
         }
     })
     .catch(err => {
