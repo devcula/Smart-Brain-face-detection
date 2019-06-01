@@ -4,6 +4,8 @@ import Navigation from '../components/NavComponent/Navigation'
 import Logo from '../components/LogoComponent/Logo';
 import Particles from 'react-particles-js';
 import Router from '../components/RoutingComponent/Router';
+import { connect } from 'react-redux';
+import {onInputChange, onBoxUpdate, onAppReset, changeRoute, changeSignedInStatus} from '../redux/actionCreators';
 
 
 const URI = "http://localhost:3000";
@@ -20,15 +22,40 @@ const particlesOptions = {
   }
 }
 
+const mapStateToProps = (state) =>{
+  return {
+    inputUrl: state.inputUrlChangeReducer.inputUrl,
+    boxes: state.updateBoxReducer.boxes,
+    route: state.changeRouteReducer.route,
+    isSignedIn: state.changeSignedInStatusReducer.isSignedIn
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onInputChange: (event) => dispatch(onInputChange(event.target.value)),
+    setFaceData: (boxList) => dispatch(onBoxUpdate(boxList)),
+    resetState: () => dispatch(onAppReset()),
+    updateRoute: (route) => {
+      if (route === "home") {
+        dispatch(changeSignedInStatus(true));
+      }
+      else if (route === "signout") {
+        dispatch(onAppReset());
+      }
+      else {
+        dispatch(changeSignedInStatus(false));
+      }
+      dispatch(changeRoute(route));
+    }
+  }
+}
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      input: "",
       imageUrl: "",
-      boxes: [],
-      route: "signin",
-      isSignedIn: false,
       currentUser: {
         id: "",
         email: "",
@@ -41,11 +68,7 @@ class App extends Component {
 
   resetState = () => {
     this.setState({
-      input: "",
       imageUrl: "",
-      boxes: [],
-      route: "signin",
-      isSignedIn: false,
       currentUser: {
         id: "",
         email: "",
@@ -66,42 +89,24 @@ class App extends Component {
           entries: user.entries,
           joined: user.joined
         },
-        isSignedIn: true
       }
     )
   }
 
-  onRouteChange = (route) => {
-    if (route === "home") {
-      this.setState({ isSignedIn: true });
-    }
-    else if (route === "signout") {
-      this.resetState();
-    }
-    else {
-      this.setState({ isSignedIn: false });
-    }
-    this.setState({ route: route });
-  }
-
-  onInputChange = (event) => {
-    this.setState({ input: event.target.value });
-  }
-
   onButtonSubmit = () => {
-    if(this.state.input){
-      this.setState({ imageUrl: this.state.input });
+    if(this.props.inputUrl){
+      this.setState({ imageUrl: this.props.inputUrl });
       fetch(URI + "/clarifai",{
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
           id: this.state.currentUser.id,
-          imageurl: this.state.input
+          imageurl: this.props.inputUrl
         })
       })
       .then(response => response.json())
       .then(data => {
-        this.setFaceData(this.calculateFaceLocation(data));
+        this.props.setFaceData(this.calculateFaceLocation(data));
       })
       .catch(err => console.log(err));
     }
@@ -143,21 +148,16 @@ class App extends Component {
     }
   }
 
-  setFaceData = (box) => {
-    this.setState({ boxes: box });
-  }
-
   render() {
     return (
       <div>
         <Particles params={particlesOptions} className="particles" />
-        <Navigation onRouteChange={this.onRouteChange} isSignedIn={this.state.isSignedIn} />
+        <Navigation props={this.props} />
         <Logo />
-        <Router
+        <Router 
+          props={this.props}
           state={this.state}
-          onRouteChange={this.onRouteChange}
           onButtonSubmit={this.onButtonSubmit}
-          onInputChange={this.onInputChange} 
           updateUser={this.updateUser} 
           URI = {URI}
         />
@@ -166,4 +166,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

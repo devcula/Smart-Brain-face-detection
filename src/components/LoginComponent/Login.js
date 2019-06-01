@@ -30,7 +30,7 @@ class Login extends React.Component {
             .then(user => {
                 if(user.id){
                     this.props.updateUser(user);
-                    this.props.onRouteChange('home');
+                    this.props.updateRoute('home');
                 }
                 else{
                     alert(user.message);
@@ -80,7 +80,7 @@ class Login extends React.Component {
                             value="Sign in" />
                         </div>
                         <div className="lh-copy mt3">
-                            <p onClick={() => this.props.onRouteChange('register')} className="f5 link dim black db pointer">Register</p>
+                            <p onClick={() => this.props.updateRoute('register')} className="f5 link dim black db pointer">Register</p>
                             <a href="/" className="f5 link dim black db">Forgot your password?</a>
                         </div>
                     </div>

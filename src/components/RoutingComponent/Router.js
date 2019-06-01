@@ -5,11 +5,12 @@ import FaceDetection from '../FaceDetectionComponent/FaceDetection';
 import Login from '../LoginComponent/Login';
 import Register from '../RegisterComponent/Register';
 
-const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange, updateUser, URI }) => {
-    if (state.route === 'signin') {
-        return <Login onRouteChange={onRouteChange} updateUser={updateUser} URI={URI}/>;
+const Router = ({props, state, onButtonSubmit, updateUser, URI }) => {
+    const {onInputChange, route, updateRoute} = props;
+    if (route === 'signin') {
+        return <Login updateRoute={updateRoute} updateUser={updateUser} URI={URI}/>;
     }
-    else if (state.route === 'home') {
+    else if (route === 'home') {
         return (
             <div>
                 <Rank state = {state}/>
@@ -17,15 +18,15 @@ const Router = ({ state, onRouteChange, onButtonSubmit, onInputChange, updateUse
                     onInputChange={onInputChange}
                     onButtonSubmit={onButtonSubmit}
                 />
-                <FaceDetection boxList={state.boxes} imageUrl={state.imageUrl} />
+                <FaceDetection boxList={props.boxes} imageUrl={state.imageUrl} />
             </div>
         )
     }
-    else if(state.route === 'register'){
-        return <Register onRouteChange={onRouteChange} updateUser={updateUser} URI={URI}/>;
+    else if(route === 'register'){
+        return <Register updateRoute={updateRoute} updateUser={updateUser} URI={URI}/>;
     }
-    else if(state.route==="signout"){
-        return <Login onRouteChange={onRouteChange} updateUser={updateUser} URI={URI}/>;
+    else if(route==="signout"){
+        return <Login updateRoute={updateRoute} updateUser={updateUser} URI={URI}/>;
     }
     else{
         

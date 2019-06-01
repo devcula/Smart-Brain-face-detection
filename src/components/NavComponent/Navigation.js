@@ -1,19 +1,20 @@
 import  React from 'react';
 import './Navigation.css';
 
-const Navigation = ({ onRouteChange, isSignedIn }) =>{
+const Navigation = ({ props }) =>{
+    const {updateRoute, isSignedIn} = props;
     if(isSignedIn) {
         return (
             <nav>
-                <p onClick={() => onRouteChange('signout')} className="f3 dim link pa3 white pointer">Sign Out</p>
+                <p onClick={() => updateRoute('signout')} className="f3 dim link pa3 white pointer">Sign Out</p>
             </nav>
         )
     }
     else{
         return (
             <nav>
-                <p onClick={() => onRouteChange('signin')} className="f3 dim link pa3 white pointer">Sign In</p>
-                <p onClick={() => onRouteChange('register')} className="f3 dim link pa3 white pointer">Register</p>
+                <p onClick={() => updateRoute('signin')} className="f3 dim link pa3 white pointer">Sign In</p>
+                <p onClick={() => updateRoute('register')} className="f3 dim link pa3 white pointer">Register</p>
             </nav>
         )
     }
