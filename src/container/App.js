@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import Navigation from './components/NavComponent/Navigation'
-import Logo from './components/LogoComponent/Logo';
+import Navigation from '../components/NavComponent/Navigation'
+import Logo from '../components/LogoComponent/Logo';
 import Particles from 'react-particles-js';
-import Router from './components/RoutingComponent/Router';
+import Router from '../components/RoutingComponent/Router';
 
 
-const URI = "https://dry-ravine-79367.herokuapp.com";
+const URI = "http://localhost:3000";
 
 const particlesOptions = {
   particles: {
