@@ -3,7 +3,8 @@ import { CHANGE_INPUT_URL,
     RESET_APP,
     CHANGE_ROUTE,
     CHANGE_SIGNED_IN_STATUS,
-    UPDATE_USER } 
+    UPDATE_USER,
+    CHANGE_LOADING_STATUS } 
     from './actionTypeConstants';
 
 export const onInputChange = (url) => {
@@ -44,5 +45,12 @@ export const updateUser = (user) =>{
     return {
         type: UPDATE_USER,
         payload: user
+    }
+}
+
+export const changeLoadingStatus = (status) =>{
+    return {
+        type: CHANGE_LOADING_STATUS,
+        payload: status
     }
 }

@@ -25,6 +25,7 @@ class Register extends React.Component {
 
     register = () =>{
         if(this.state.email && this.state.name && this.state.password){
+            this.props.changeLoadingStatus(true);
             fetch(this.props.URI + "/register", {
                 method: "POST",
                 body: JSON.stringify(this.state),
@@ -34,9 +35,11 @@ class Register extends React.Component {
                 if(res.id){
                     this.props.updateUser(res);
                     this.props.updateRoute('home');
+                    this.props.changeLoadingStatus(false);
                 }
                 else{
                     alert(res.message);
+                    this.props.changeLoadingStatus(false);
                 }
             })
             .catch(err => {
@@ -96,7 +99,7 @@ class Register extends React.Component {
                             />
                         </div>
                         <div className="lh-copy mt3">
-                            <p onClick={() => this.props.updateRoute('signin')} className="pointer f5 link dim black db"><h3>Already a member? Login</h3> </p>
+                            <p onClick={() => this.props.updateRoute('signin')} className="pointer tc f5 link dim black db">Already a member? Login</p>
                         </div>
                     </div>
                 </main>

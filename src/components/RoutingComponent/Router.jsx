@@ -6,9 +6,9 @@ import Login from '../LoginComponent/Login.jsx';
 import Register from '../RegisterComponent/Register.jsx';
 
 const Router = ({props, onButtonSubmit, URI }) => {
-    const {onInputChange, route, updateRoute, updateUser} = props;
+    const {onInputChange, route, updateRoute, updateUser, changeLoadingStatus} = props;
     if (route === 'signin') {
-        return <Login updateRoute={updateRoute} updateUser={updateUser} URI={URI}/>;
+        return <Login changeLoadingStatus={changeLoadingStatus} updateRoute={updateRoute} updateUser={updateUser} URI={URI}/>;
     }
     else if (route === 'home') {
         return (
@@ -17,16 +17,27 @@ const Router = ({props, onButtonSubmit, URI }) => {
                 <ImageLinkForm
                     onInputChange={onInputChange}
                     onButtonSubmit={onButtonSubmit}
+                    changeLoadingStatus={changeLoadingStatus}
                 />
                 <FaceDetection boxList={props.boxes} imageUrl={props.inputUrl} />
             </div>
         )
     }
     else if(route === 'register'){
-        return <Register updateRoute={updateRoute} updateUser={updateUser} URI={URI}/>;
+        return <Register 
+        changeLoadingStatus={changeLoadingStatus} 
+        updateRoute={updateRoute} 
+        updateUser={updateUser} 
+        URI={URI}
+        />;
     }
     else if(route==="signout"){
-        return <Login updateRoute={updateRoute} updateUser={updateUser} URI={URI}/>;
+        return <Login 
+        changeLoadingStatus={changeLoadingStatus} 
+        updateRoute={updateRoute} 
+        updateUser={updateUser} 
+        URI={URI}
+        />;
     }
     else{
         

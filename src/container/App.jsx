@@ -4,17 +4,21 @@ import Navigation from '../components/NavComponent/Navigation.jsx'
 import Logo from '../components/LogoComponent/Logo.jsx';
 import Particles from 'react-particles-js';
 import Router from '../components/RoutingComponent/Router.jsx';
+import Loader from '../components/LoaderComponent/Loader.jsx';
 import { connect } from 'react-redux';
-import {onInputChange, 
-  onBoxUpdate, 
-  onAppReset, 
-  changeRoute, 
+import {
+  onInputChange,
+  onBoxUpdate,
+  onAppReset,
+  changeRoute,
   changeSignedInStatus,
-  updateUser } 
+  updateUser,
+  changeLoadingStatus
+}
   from '../redux/actionCreators';
 
 
-const URI = "http://localhost:3001";
+const URI = "https://dry-ravine-79367.herokuapp.com";
 
 const particlesOptions = {
   particles: {
@@ -28,13 +32,14 @@ const particlesOptions = {
   }
 }
 
-const mapStateToProps = (state) =>{
+const mapStateToProps = (state) => {
   return {
     inputUrl: state.inputUrlChangeReducer.inputUrl,
     boxes: state.updateBoxReducer.boxes,
     route: state.changeRouteReducer.route,
     isSignedIn: state.changeSignedInStatusReducer.isSignedIn,
-    currentUser: state.updateUserReducer.currentUser
+    currentUser: state.updateUserReducer.currentUser,
+    loading: state.loadingStatusReducer.loading
   }
 }
 
@@ -52,35 +57,46 @@ const mapDispatchToProps = (dispatch) => {
       }
       else if (route === "signout") {
         dispatch(onAppReset());
+        dispatch(changeLoadingStatus(false));
       }
       else {
         dispatch(changeSignedInStatus(false));
       }
       dispatch(changeRoute(route));
     },
-    updateUser: (user) => dispatch(updateUser(user))
+    updateUser: (user) => dispatch(updateUser(user)),
+    changeLoadingStatus: (status) => dispatch(changeLoadingStatus(status))
   }
 }
 
 class App extends Component {
 
+  componentDidMount = () => {
+    this.props.changeLoadingStatus(false);
+  }
+
   onButtonSubmit = () => {
-    if(this.props.inputUrl){
-      fetch(URI + "/clarifai",{
+    if (this.props.inputUrl) {
+      this.props.changeLoadingStatus(true);
+      fetch(URI + "/clarifai", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: this.props.currentUser.id,
           imageurl: this.props.inputUrl
         })
       })
-      .then(response => response.json())
-      .then(data => {
-        this.props.setFaceData(this.calculateFaceLocation(data));
-      })
-      .catch(err => console.log(err));
+        .then(response => response.json())
+        .then(data => {
+          this.props.setFaceData(this.calculateFaceLocation(data));
+          this.props.changeLoadingStatus(false);
+        })
+        .catch(err => {
+          console.log(err);
+          this.props.changeLoadingStatus(false);
+        });
     }
-    else{
+    else {
       alert("Please enter a url");
     }
   }
@@ -99,18 +115,18 @@ class App extends Component {
           bottomRow: height - (faceData.bottom_row * height)
         }
       });
-      fetch(URI + "/update",{
+      fetch(URI + "/update", {
         method: "PUT",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: this.props.currentUser.id,
           entries: faceData.length
         })
       }).then(response => response.json())
-      .then(user => {
-        this.props.updateUser(user);
-      })
-      .catch(err => console.log(err));
+        .then(user => {
+          this.props.updateUser(user);
+        })
+        .catch(err => console.log(err));
       return faceLocationsData;
     }
     else {
@@ -121,13 +137,14 @@ class App extends Component {
   render() {
     return (
       <div>
+        <Loader loading={this.props.loading} />
         <Particles params={particlesOptions} className="particles" />
         <Navigation props={this.props} />
         <Logo />
-        <Router 
+        <Router
           props={this.props}
           onButtonSubmit={this.onButtonSubmit}
-          URI = {URI}
+          URI={URI}
         />
       </div>
     )

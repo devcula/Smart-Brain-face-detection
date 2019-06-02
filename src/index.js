@@ -10,7 +10,6 @@ import { createLogger } from 'redux-logger';
 
 import 'tachyons';
 
-// const appReducer = combineReducers({inputUrlChangeReducer, updateBoxReducer});
 const logger = createLogger();
 
 const store = createStore(rootReducer, applyMiddleware(logger));
