@@ -35,6 +35,9 @@ class Login extends React.Component {
                 else{
                     alert(user.message);
                 }
+            }).catch(err => {
+                console.log(err);
+                alert("Technical Error");
             });
         }
         else{

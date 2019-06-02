@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import Navigation from '../components/NavComponent/Navigation'
-import Logo from '../components/LogoComponent/Logo';
+import Navigation from '../components/NavComponent/Navigation.jsx'
+import Logo from '../components/LogoComponent/Logo.jsx';
 import Particles from 'react-particles-js';
-import Router from '../components/RoutingComponent/Router';
+import Router from '../components/RoutingComponent/Router.jsx';
 import { connect } from 'react-redux';
 import {onInputChange, 
   onBoxUpdate, 
@@ -14,7 +14,7 @@ import {onInputChange,
   from '../redux/actionCreators';
 
 
-const URI = "http://localhost:3000";
+const URI = "http://localhost:3001";
 
 const particlesOptions = {
   particles: {

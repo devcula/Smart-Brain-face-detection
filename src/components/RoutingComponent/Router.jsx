@@ -1,9 +1,9 @@
 import React from 'react';
-import ImageLinkForm from '../ImageLinkComponent/ImageLinkForm';
-import Rank from '../RankComponent/Rank';
-import FaceDetection from '../FaceDetectionComponent/FaceDetection';
-import Login from '../LoginComponent/Login';
-import Register from '../RegisterComponent/Register';
+import ImageLinkForm from '../ImageLinkComponent/ImageLinkForm.jsx';
+import Rank from '../RankComponent/Rank.jsx';
+import FaceDetection from '../FaceDetectionComponent/FaceDetection.jsx';
+import Login from '../LoginComponent/Login.jsx';
+import Register from '../RegisterComponent/Register.jsx';
 
 const Router = ({props, onButtonSubmit, URI }) => {
     const {onInputChange, route, updateRoute, updateUser} = props;
