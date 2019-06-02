@@ -81,7 +81,7 @@ class Login extends React.Component {
                         </div>
                         <div className="lh-copy mt3">
                             <p onClick={() => this.props.updateRoute('register')} className="f5 link dim black db pointer">Register</p>
-                            <a href="/" className="f5 link dim black db">Forgot your password?</a>
+                            {/* <a href="/" className="f5 link dim black db">Forgot your password?</a> */}
                         </div>
                     </div>
                 </main>

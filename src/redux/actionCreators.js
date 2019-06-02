@@ -2,7 +2,8 @@ import { CHANGE_INPUT_URL,
     UPDATE_FACE_BOXES,
     RESET_APP,
     CHANGE_ROUTE,
-    CHANGE_SIGNED_IN_STATUS } 
+    CHANGE_SIGNED_IN_STATUS,
+    UPDATE_USER } 
     from './actionTypeConstants';
 
 export const onInputChange = (url) => {
@@ -36,5 +37,12 @@ export const changeSignedInStatus = (isSignedIn) =>{
     return {
         type: CHANGE_SIGNED_IN_STATUS,
         payload: isSignedIn
+    }
+}
+
+export const updateUser = (user) =>{
+    return {
+        type: UPDATE_USER,
+        payload: user
     }
 }

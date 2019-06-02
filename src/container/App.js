@@ -5,7 +5,13 @@ import Logo from '../components/LogoComponent/Logo';
 import Particles from 'react-particles-js';
 import Router from '../components/RoutingComponent/Router';
 import { connect } from 'react-redux';
-import {onInputChange, onBoxUpdate, onAppReset, changeRoute, changeSignedInStatus} from '../redux/actionCreators';
+import {onInputChange, 
+  onBoxUpdate, 
+  onAppReset, 
+  changeRoute, 
+  changeSignedInStatus,
+  updateUser } 
+  from '../redux/actionCreators';
 
 
 const URI = "http://localhost:3000";
@@ -27,13 +33,17 @@ const mapStateToProps = (state) =>{
     inputUrl: state.inputUrlChangeReducer.inputUrl,
     boxes: state.updateBoxReducer.boxes,
     route: state.changeRouteReducer.route,
-    isSignedIn: state.changeSignedInStatusReducer.isSignedIn
+    isSignedIn: state.changeSignedInStatusReducer.isSignedIn,
+    currentUser: state.updateUserReducer.currentUser
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onInputChange: (event) => dispatch(onInputChange(event.target.value)),
+    onInputChange: (event) => {
+      dispatch(onBoxUpdate([]));
+      dispatch(onInputChange(event.target.value));
+    },
     setFaceData: (boxList) => dispatch(onBoxUpdate(boxList)),
     resetState: () => dispatch(onAppReset()),
     updateRoute: (route) => {
@@ -47,60 +57,20 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(changeSignedInStatus(false));
       }
       dispatch(changeRoute(route));
-    }
+    },
+    updateUser: (user) => dispatch(updateUser(user))
   }
 }
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      imageUrl: "",
-      currentUser: {
-        id: "",
-        email: "",
-        name: "",
-        entries: "",
-        joined: ""
-      }
-    }
-  }
-
-  resetState = () => {
-    this.setState({
-      imageUrl: "",
-      currentUser: {
-        id: "",
-        email: "",
-        name: "",
-        entries: "",
-        joined: ""
-      }
-    })
-  }
-
-  updateUser = (user) =>{
-    this.setState(
-      {
-        currentUser: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          entries: user.entries,
-          joined: user.joined
-        },
-      }
-    )
-  }
 
   onButtonSubmit = () => {
     if(this.props.inputUrl){
-      this.setState({ imageUrl: this.props.inputUrl });
       fetch(URI + "/clarifai",{
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-          id: this.state.currentUser.id,
+          id: this.props.currentUser.id,
           imageurl: this.props.inputUrl
         })
       })
@@ -133,12 +103,12 @@ class App extends Component {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-          id: this.state.currentUser.id,
+          id: this.props.currentUser.id,
           entries: faceData.length
         })
       }).then(response => response.json())
       .then(user => {
-        this.updateUser(user);
+        this.props.updateUser(user);
       })
       .catch(err => console.log(err));
       return faceLocationsData;
@@ -156,9 +126,7 @@ class App extends Component {
         <Logo />
         <Router 
           props={this.props}
-          state={this.state}
           onButtonSubmit={this.onButtonSubmit}
-          updateUser={this.updateUser} 
           URI = {URI}
         />
       </div>
