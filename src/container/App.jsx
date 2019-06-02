@@ -18,7 +18,7 @@ import {
   from '../redux/actionCreators';
 
 
-const URI = "https://dry-ravine-79367.herokuapp.com";
+const URI = "http://localhost:3001";
 
 const particlesOptions = {
   particles: {

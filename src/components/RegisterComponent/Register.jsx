@@ -7,11 +7,20 @@ class Register extends React.Component {
         this.state = {
             email: "",
             name: "",
-            password: ""
+            password: "",
+            isValidEmail: false
         }
     }
 
     onEmailChange = (event) =>{
+        if(/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(event.target.value)){
+            document.getElementById("invalidEmailLabel").style.display="none";
+            this.setState({isValidEmail: true});
+        }
+        else{
+            document.getElementById("invalidEmailLabel").style.display="block";
+            this.setState({isValidEmail: false});
+        }
         this.setState({email: event.target.value});
     }
 
@@ -24,7 +33,7 @@ class Register extends React.Component {
     }
 
     register = () =>{
-        if(this.state.email && this.state.name && this.state.password){
+        if(this.state.email && this.state.name && this.state.password && this.state.isValidEmail){
             this.props.changeLoadingStatus(true);
             fetch(this.props.URI + "/register", {
                 method: "POST",
@@ -47,7 +56,7 @@ class Register extends React.Component {
             })
         }
         else{
-            alert("Please enter all the information");
+            alert("Please enter valid information to register");
         }
     }
 
@@ -78,6 +87,7 @@ class Register extends React.Component {
                                 required 
                                 onChange={this.onEmailChange}
                                 />
+                                <p id="invalidEmailLabel" className="f5 b red" style={{display: "none"}}>Invalid Email</p>
                             </div>
                             <div className="mv3">
                                 <label className="db fw6 lh-copy f4" htmlFor="password">Password</label>

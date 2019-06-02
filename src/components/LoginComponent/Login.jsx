@@ -6,11 +6,20 @@ class Login extends React.Component {
         super(props);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            isValidEmail: false
         }
     }
 
     onEmailChange = (event) => {
+        if(/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(event.target.value)){
+            document.getElementById("invalidEmailLabel").style.display="none";
+            this.setState({isValidEmail: true});
+        }
+        else{
+            document.getElementById("invalidEmailLabel").style.display="block";
+            this.setState({isValidEmail: false});
+        }
         this.setState({ email: event.target.value });
     }
 
@@ -19,7 +28,7 @@ class Login extends React.Component {
     }
 
     login = () => {
-        if (this.state.email && this.state.password) {
+        if (this.state.email && this.state.password && this.state.isValidEmail) {
             this.props.changeLoadingStatus(true);
             fetch(this.props.URI + "/login", {
                 method: "POST",
@@ -44,7 +53,7 @@ class Login extends React.Component {
                 });
         }
         else {
-            alert("Please enter both email and password");
+            alert("Please enter valid email and password");
         }
     }
 
@@ -56,7 +65,7 @@ class Login extends React.Component {
                         <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                             <legend className="f2 fw6 ph0 mh0 tc">Sign In</legend>
                             <div className="mt3">
-                                <label className="db fw6 lh-copy f4" htmlFor="email-address">Email</label>
+                                <label className="db fw6 lh-copy f4" htmlFor="email">Email</label>
                                 <input
                                     className="br-pill outline-0 shadow-5 pa3 input-reset bn bg-transparent hover-bg-black hover-white w-100"
                                     type="email"
@@ -65,6 +74,7 @@ class Login extends React.Component {
                                     required
                                     onChange={this.onEmailChange}
                                 />
+                                <p id="invalidEmailLabel" className="f5 b red" style={{display: "none"}}>Invalid Email</p>
                             </div>
                             <div className="mv3">
                                 <label className="db fw6 lh-copy f4" htmlFor="password">Password</label>
