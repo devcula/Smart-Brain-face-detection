@@ -33,7 +33,7 @@ class Register extends React.Component {
             .then(res => {
                 if(res.id){
                     this.props.updateUser(res);
-                    this.props.onRouteChange('home');
+                    this.props.updateRoute('home');
                 }
                 else{
                     alert(res.message);
@@ -96,7 +96,7 @@ class Register extends React.Component {
                             />
                         </div>
                         <div className="lh-copy mt3">
-                            <p onClick={() => this.props.onRouteChange('signin')} className="pointer f5 link dim black db">Already a member? Login </p>
+                            <p onClick={() => this.props.updateRoute('signin')} className="pointer f5 link dim black db">Already a member? Login </p>
                         </div>
                     </div>
                 </main>
