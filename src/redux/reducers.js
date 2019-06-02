@@ -4,7 +4,8 @@ import { CHANGE_INPUT_URL,
     RESET_APP,
     CHANGE_ROUTE,
     CHANGE_SIGNED_IN_STATUS,
-    UPDATE_USER } 
+    UPDATE_USER,
+    CHANGE_LOADING_STATUS } 
     from './actionTypeConstants';
 
 const initialInputUrlState = {
@@ -78,11 +79,25 @@ export const updateUserReducer = (state = initialUserState, action = {})=>{
     }
 }
 
+const initialLoadingState = {
+    loading: true
+}
+
+export const loadingStatusReducer = (state= initialLoadingState, action={}) =>{
+    switch(action.type){
+        case CHANGE_LOADING_STATUS:
+            return Object.assign({},state,{loading: action.payload});
+        default:
+            return state;
+    }
+}
+
 export const appReducer = combineReducers({inputUrlChangeReducer, 
     updateBoxReducer, 
     changeRouteReducer, 
     changeSignedInStatusReducer,
-    updateUserReducer    
+    updateUserReducer,
+    loadingStatusReducer    
 });
 
 export const rootReducer = (state, action) =>{
