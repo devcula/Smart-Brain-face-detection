@@ -1,4 +1,9 @@
 .login{
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.7);
+    /* background: rgba(88, 88, 88, 0.1); */
 }
 
+.login-fields{
+    padding: 2rem 0 2rem 0;
+    width: 90%;
+}

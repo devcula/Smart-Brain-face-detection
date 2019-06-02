@@ -44,8 +44,8 @@ class Login extends React.Component {
 
     render(){
         return (
-            <div className="align-center login center w-50 br3">
-                <main className="pa4 black-80">
+            <div className="align-center login center w-80 br3 shadow-5">
+                <main className="pa4 black-80 login-fields">
                     <div className="measure center">
                         <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                             <legend className="f2 fw6 ph0 mh0 tc">Sign In</legend>
@@ -80,7 +80,7 @@ class Login extends React.Component {
                             value="Sign in" />
                         </div>
                         <div className="lh-copy mt3">
-                            <p onClick={() => this.props.updateRoute('register')} className="f5 link dim black db pointer">Register</p>
+                            <p onClick={() => this.props.updateRoute('register')} className="f5 tc link dim black db pointer"><h3>Not a member yet? Register!</h3></p>
                             {/* <a href="/" className="f5 link dim black db">Forgot your password?</a> */}
                         </div>
                     </div>

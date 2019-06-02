@@ -50,8 +50,8 @@ class Register extends React.Component {
 
     render(){
         return (
-            <div className="align-center register center w-50 br3">
-                <main className="pa4 black-80">
+            <div className="align-center register center w-80 br3">
+                <main className="pa4 black-80 register-fields">
                     <div className="measure center">
                         <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                             <legend className="f2 fw6 ph0 mh0 tc">Welcome to Smart Brain</legend>
@@ -96,7 +96,7 @@ class Register extends React.Component {
                             />
                         </div>
                         <div className="lh-copy mt3">
-                            <p onClick={() => this.props.updateRoute('signin')} className="pointer f5 link dim black db">Already a member? Login </p>
+                            <p onClick={() => this.props.updateRoute('signin')} className="pointer f5 link dim black db"><h3>Already a member? Login</h3> </p>
                         </div>
                     </div>
                 </main>
