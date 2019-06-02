@@ -1,8 +1,14 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+This project is now deployed on heroku. Check it Out! [Smart Brain](https://smart-brain-devcula.herokuapp.com/).
+
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory,run:
+
+### `npm install`
+
+Installs all the dependency required by the project.
 
 ### `npm start`
 
