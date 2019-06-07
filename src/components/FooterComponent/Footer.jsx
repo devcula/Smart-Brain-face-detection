@@ -12,7 +12,7 @@ const Footer = () => {
         <div>
             <footer className="footer-distributed">
                 <div className="footer-left">
-                    <h3>dEv<span>(uLa</span></h3>
+                    <h3>Smart Brain <span>Face Detection</span></h3>
                     <p className="footer-links">
                         <a href="/">Home</a>
                         ·
@@ -43,7 +43,7 @@ const Footer = () => {
                 <div className="footer-right">
                     <p className="footer-company-about">
                         <span>About the website</span>
-                        E-(oM is an e-commerce project being developed by Abhishek Prasad. This website uses some of latest technologies including <strong>ReactJS, Redux, ExpressJS, NodeJS and Postgresql</strong>.
+                        This project is being developed by Abhishek Prasad. This website uses some of latest technologies including <strong>ReactJS, Redux, ExpressJS, NodeJS and Postgresql</strong>.
                     </p>
                     <div className="footer-icons">
                         <a href="https://github.com/devcula" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faGithub} /></a>
