@@ -4,11 +4,21 @@ import Rank from '../RankComponent/Rank.jsx';
 import FaceDetection from '../FaceDetectionComponent/FaceDetection.jsx';
 import Login from '../LoginComponent/Login.jsx';
 import Register from '../RegisterComponent/Register.jsx';
+import Footer from '../FooterComponent/Footer';
 
 const Router = ({props, onButtonSubmit, URI }) => {
     const {onInputChange, route, updateRoute, updateUser, changeLoadingStatus} = props;
     if (route === 'signin') {
-        return <Login changeLoadingStatus={changeLoadingStatus} updateRoute={updateRoute} updateUser={updateUser} URI={URI}/>;
+        return (
+            <div>
+                <Login 
+                changeLoadingStatus={changeLoadingStatus} 
+                updateRoute={updateRoute} 
+                updateUser={updateUser} 
+                URI={URI}/>
+                <Footer />
+            </div>
+        )
     }
     else if (route === 'home') {
         return (
@@ -24,20 +34,30 @@ const Router = ({props, onButtonSubmit, URI }) => {
         )
     }
     else if(route === 'register'){
-        return <Register 
-        changeLoadingStatus={changeLoadingStatus} 
-        updateRoute={updateRoute} 
-        updateUser={updateUser} 
-        URI={URI}
-        />;
+        return (
+            <div>
+                <Register 
+                    changeLoadingStatus={changeLoadingStatus} 
+                    updateRoute={updateRoute} 
+                    updateUser={updateUser} 
+                    URI={URI}
+                /> 
+                <Footer />
+            </div>
+        )
     }
     else if(route==="signout"){
-        return <Login 
-        changeLoadingStatus={changeLoadingStatus} 
-        updateRoute={updateRoute} 
-        updateUser={updateUser} 
-        URI={URI}
-        />;
+        return (
+            <div>
+                <Login 
+                changeLoadingStatus={changeLoadingStatus} 
+                updateRoute={updateRoute} 
+                updateUser={updateUser} 
+                URI={URI}
+                />
+                <Footer />
+            </div>
+        )
     }
     else{
         

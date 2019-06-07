@@ -5,7 +5,6 @@ import Logo from '../components/LogoComponent/Logo.jsx';
 import Particles from 'react-particles-js';
 import Router from '../components/RoutingComponent/Router.jsx';
 import Loader from '../components/LoaderComponent/Loader.jsx';
-import Footer from '../components/FooterComponent/Footer';
 import { connect } from 'react-redux';
 import {
   onInputChange,
@@ -147,7 +146,6 @@ class App extends Component {
           onButtonSubmit={this.onButtonSubmit}
           URI={URI}
         />
-        <Footer />
       </div>
     )
   }
