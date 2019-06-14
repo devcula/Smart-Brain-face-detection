@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This project is now deployed on heroku. Check it Out! [Smart Brain](https://smart-brain-devcula.herokuapp.com/).
+This project is now deployed on heroku and github pages. Check it Out! [Smart Brain on Heroku](https://smart-brain-devcula.herokuapp.com/) and [Smart Brain on Github pages](https://devcula.github.io/Smart-Brain-face-detection/).
 
 ## Available Scripts
 
