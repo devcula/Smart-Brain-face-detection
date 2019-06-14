@@ -2,6 +2,7 @@
   "name": "smartbrainfacedetection",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://devcula.github.io/Smart-Brain-face-detection",
   "dependencies": {
     "@emotion/core": "^10.0.10",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
