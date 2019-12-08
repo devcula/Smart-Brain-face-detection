@@ -50,6 +50,7 @@ class Login extends React.Component {
                 }).catch(err => {
                     console.log(err);
                     alert("Technical Error");
+                    this.props.changeLoadingStatus(false);
                 });
         }
         else {
